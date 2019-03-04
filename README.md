@@ -1,6 +1,6 @@
 # VM Setup 
 
-You can follow the same instructions as in programming assignment 3's VM setup (https://github.com/stanford-cs149/asst3/blob/master/cloud_readme.md) to create another instance (or continue using the one you already created). 
+You can follow the same instructions as in programming assignment 3's VM setup (https://github.com/stanford-cs149/asst3/blob/master/cloud_readme.md) to create another instance with the same configuration (or continue using the one you already created). 
 
 You will need to install Python and Java before installing Spark. Here are the commands for doing so: 
 
