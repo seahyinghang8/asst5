@@ -159,7 +159,7 @@ Run the aforementioned iterative process in Spark for 100 iterations (assuming Î
 1. List the top 5 node ids with the highest PageRank scores.
 2. List the bottom 5 node ids with the lowest PageRank scores.
 
-For a sanity check, we have provided a smaller dataset (graph-small.txt). In that dataset, the top node has id 53 with value 0.036 after 40 iterations (you can use this value to help debug). We will be grading you on your results for graph-full.txt. We give you a file pageRank.py to write your code in, with basic starter code that starts your Spark context and reads in the input text file as an RDD. You will also be reporting the total time it took your program to run. The starter code already wraps the code you will write in timing that is printed out at the very end (report this number in seconds).
+For a sanity check, we have provided a smaller dataset (graph-small.txt). In that dataset, the top node has id 53 with value 0.036 after 40 iterations (you can use this value to help debug). We will be grading you on your results for graph-full.txt. We give you a file pageRank.py to write your code in, with basic starter code that starts your Spark context and reads in the input text file as an RDD. You will also be reporting the total time it took your program to run. The starter code already wraps the code you will write in timing that is printed out at the very end (report this number in seconds). Our reference solution takes less than 8 seconds for 100 iterations on graph-full.txt.
 
 What you need to turn in (in a zipped file to Canvas):
 1. Turn in your code in pageRank.py
