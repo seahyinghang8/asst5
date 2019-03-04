@@ -1,6 +1,7 @@
 import sys
 from pyspark import SparkConf, SparkContext
 import numpy as np
+import time
 
 # Create spark context
 conf = SparkConf()
@@ -13,6 +14,7 @@ sc = SparkContext(conf=conf)
 lines = sc.textFile(sys.argv[1])
 
 ### STUDENT PAGE RANK CODE ###
+first = time.time()
 
 
 
@@ -24,7 +26,8 @@ lines = sc.textFile(sys.argv[1])
 
 
 
-
+last = time.time()
+print("Total Program Time: " + str(last - first))
 
 # Do not forget to stop the spark instance
 sc.stop()
