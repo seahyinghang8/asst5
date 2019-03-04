@@ -165,8 +165,8 @@ We expect you to use Spark for all operations on the data (including performing 
 
 What you need to turn in (in a zipped file to Canvas):
 1. Turn in your code in pageRank.py
-2. Turn in a .txt file with the top 5 node ids and their PageRank scores, and the bottom 5 node ids and their PageRank scores for graph-full.txt after 100 iterations. This is worth 80 points for correctness.
-3. In the same text file, include the total time it took your code to run. This is worth 20 points for performance.
+2. Turn in a .txt file with the top 5 node ids and their PageRank scores, and the bottom 5 node ids and their PageRank scores for graph-full.txt after 100 iterations. This is worth 70 points for correctness.
+3. In the same text file, include the total time it took your code to run. This is worth 30 points for performance.
 
 
 
