@@ -132,7 +132,7 @@ counts.saveAsTextFile(sys.argv[2])
 sc.stop()
 ```
 
-# Page Rank in Spark
+# Page Rank in Spark (100 Points)
 In this problem, you will learn how to implement the PageRank algorithm in Spark. You will be experimenting with a small randomly generated graph (assume graph has no dead-ends) provided at graph-full.txt. You can use graph-small.txt as a sanity check that your code is working, and for debugging. There are 100 nodes (n = 100) in the small graph and 1000 nodes (n = 1000) in the full graph, and m = 8192 edges, 1000 of which form a directed cycle (through all the nodes) which ensures that the graph is connected. It is easy to see that the existence of such a cycle ensures that there are no dead ends in the graph. There may be multiple directed edges between a pair of nodes, and your solution should treat them as the same edge. The first column in graph-full.txt refers to the source node, and the second column refers to the destination node.
 
 Implementation hint: You may choose to store the PageRank vector r either in memory or as an RDD. Only the matrix of links is too large to store in memory.
@@ -165,8 +165,8 @@ We expect you to use Spark for all operations on the data (including performing 
 
 What you need to turn in (in a zipped file to Canvas):
 1. Turn in your code in pageRank.py
-2. Turn in a .txt file with the top 5 node ids and their PageRank scores, and the bottom 5 node ids and their PageRank scores for graph-full.txt after 100 iterations.
-3. In the same text file, include the total time it took your code to run.
+2. Turn in a .txt file with the top 5 node ids and their PageRank scores, and the bottom 5 node ids and their PageRank scores for graph-full.txt after 100 iterations. This is worth 80 points for correctness.
+3. In the same text file, include the total time it took your code to run. This is worth 20 points for performance.
 
 
 
