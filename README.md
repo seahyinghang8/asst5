@@ -1,5 +1,14 @@
 # Page Rank in Spark
 
+## Summary
+Spark is a general-purpose distributed data processing engine that is suitable for use in a wide range of circumstances. In this assignment you will learn to use the PySpark Python API for Spark, and will be implementing a Page Rank algorithm leveraging Spark.
+
+A quick overview on Spark:
+1. A Spark application runs as independent processes, coordinated by the SparkSession object in the driver program.
+2. The resource or cluster manager assigns tasks to workers, one task per partition.
+3. A task applies its unit of work to the dataset in its partition and outputs a new partition dataset. Because iterative algorithms apply operations repeatedly to data, they benefit from caching datasets across iterations.
+4. Results are sent back to the driver application or can be saved to disk.
+
 ## First things first: VM Setup
 
 You can follow the same instructions as in programming assignment 3's VM setup (https://github.com/stanford-cs149/asst3/blob/master/cloud_readme.md) to create another instance with the same configuration (or continue using the one you already created).
@@ -143,13 +152,16 @@ sc.stop()
 ```
 
 ## Assignment: Page Rank in Spark (100 Points) due on 03/14
+
+### Overview
 You have already implemented the Page Rank algorithm in openMP. Now you will implement a similar version of the algorithm using Spark!
 
-In this problem, you will be experimenting with a small randomly generated graph (assume graph has no dead-ends) provided at graph-full.txt. You can use graph-small.txt as a sanity check that your code is working, and for debugging. There are 100 nodes (n = 100) in the small graph and 1000 nodes (n = 1000) in the full graph, and m = 8192 edges, 1000 of which form a directed cycle (through all the nodes) which ensures that the graph is connected. It is easy to see that the existence of such a cycle ensures that there are no dead ends in the graph. There may be multiple directed edges between a pair of nodes, and your solution should treat them as the same edge. The first column in graph-full.txt refers to the source node, and the second column refers to the destination node.
+In this problem, you will be experimenting with a small randomly generated graph (assume graph has no dead-ends) provided at graph-full.txt. You can use graph-small.txt as a sanity check that your code is working, and for debugging. These graphs have directed edges, and the files you will be parsing consist of lines, where each line represents an edge by two nodes seperated by a space. The first node is the source node, and the second is the destination node for the edge. For example here is what a line may look like: "0 1".
 
-Implementation hint: You may choose to store the PageRank vector r either in memory or as an RDD. Only the matrix of links is too large to store in memory.
+There are 100 nodes (n = 100) in the small graph and 1000 nodes (n = 1000) in the full graph. You can use the graph-small.txt file for debugging and sanity check, and the graph-full.txt to get a sense of your performance. We will be additionally testing you on much larger graphs that we will release in a day or two. You may choose to store the PageRank vector r either in memory or as an RDD, however you will not be able to store the matrix of links (M below) in memory, especially on the larger graphs we will be testing you on (that will have around 500 million nodes). Due to this the main challenge will be figuring out how to store the Matrix of links M as an RDD, and perform the matrix-vector multiply using Spark primitives.
 
-Let the matrix M be an (n x n) matrix such that for any i and j between [1, n], M_{ji} = 1/deg(i) if there exists a directed edge from i to j, and 0 otherwise (Here M_{ji} is the j'th row and i'th column entry of M). Here, deg(i) is the number of outgoing edges from node i in the graph. If there are multiple edges in the same direction between two nodes, treat them as a single edge.
+### Algorithm
+Now let us setup the algorithm you will be implementing. Let the matrix M be an (n x n) matrix such that for any i and j between [1, n], M_{ji} = 1/deg(i) if there exists a directed edge from i to j, and 0 otherwise (Here M_{ji} is the j'th row and i'th column entry of M). Here, deg(i) is the number of outgoing edges from node i in the graph. If there are multiple edges in the same direction between two nodes, treat them as a single edge.
 
 By the definition of PageRank, assuming 1 − β to be the teleport probability, and denoting the PageRank vector by the column vector r, we have the following equation:
 ```
@@ -164,14 +176,22 @@ Based on this equation, the iterative procedure to compute PageRank works as fol
 2. For i from 1 to k, iterate: r = 1[(1 - β)/n] + β*M*r
 ```
 
-You can not store the matrix M in local memory, but you can store the vector r locally. You must figure out a way to perform the matrix-vector multiplication as an RDD operation using Spark primitives. We recommend that you also use numpy in other parts of your code to perform vector additions, dot products, etc...
+You will need to figure out the best way to store the matrix M as an RDD (to simplify the matrix-vector multiplication in each iteration).
 
+We recommend that you use numpy in other parts of your code to perform vector additions, dot products, etc... Here is a few numpy functions you may find useful:
+1. https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html
+2. https://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html
+3. https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.sum.html
+
+Here is a general tutorial for those new to numpy: http://cs231n.github.io/python-numpy-tutorial/#numpy-math
+
+### Handin Requirements
 Run the aforementioned iterative process in Spark for 100 iterations (assuming β = 0.8) and obtain the PageRank vector r. The matrix M can be large and should be processed as an RDD in your solution. Compute the following:
 
 1. List the top 5 node ids with the highest PageRank scores.
 2. List the bottom 5 node ids with the lowest PageRank scores.
 
-For a sanity check, we have provided a smaller dataset (graph-small.txt). In that dataset, the top node has id 53 with value 0.036 after 40 iterations (you can use this value to help debug). We will be grading you on your results for graph-full.txt. We give you a file pageRank.py to write your code in, with basic starter code that starts your Spark context and reads in the input text file as an RDD. You will also be reporting the total time it took your program to run. The starter code already wraps the code you will write in timing that is printed out at the very end (report this number in seconds). Our reference solution takes less than ~12-13 seconds for 100 iterations on graph-full.txt (on 32 vCPUs).
+For a sanity check, we have provided a smaller dataset (graph-small.txt). In that dataset, the top node has id 53 with value 0.036 after 40 iterations (you can use this value to help debug). We will be grading you on your results for graph-full.txt and larger graphs that we will be releasing. We give you a file pageRank.py to write your code in, with basic starter code that starts your Spark context and reads in the input text file as an RDD. You will also be reporting the total time it took your program to run. The starter code already wraps the code you will write in timing that is printed out at the very end (report this number in seconds). Our reference solution takes less than ~12-13 seconds for 100 iterations on graph-full.txt (on 32 vCPUs).
 
 We expect you to use Spark for all operations on the data (including performing the matrix-vector multiply). You can use numpy or regular python for computing dot products and other arithmetic, but any other data computation should leverage Spark.
 
