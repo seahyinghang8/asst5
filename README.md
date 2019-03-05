@@ -84,7 +84,8 @@ bin/spark-submit --master ’local[*]’ path/to/myapp.py path/to/file
 ```
 
 ## 4) WordCount in Spark
-The typical “Hello, world!” app for Spark applications is known as word count. The map/re- duce model is particularly well suited to applications like counting words in a document. In this section, you will see how to develop a word count application in python, and Scala. Prior to reading this section, you should read through the Spark programming guide if you haven’t already.
+
+The typical “Hello, world!” type of app for Spark applications is word count. The map/reduce model is particularly well suited to applications like counting words in a document. In this section, you will see how to develop a word count application using Spark in Python, and Scala. Prior to reading this section, you should read through the Spark programming guide if you haven’t already.
 
 All operations in Spark operate on data structures called RDDs, Resilient Distributed Datasets. An RDD is nothing more than a collection of objects. If you read a file into an RDD, each line will become an object (a string, actually) in the collection that is the RDD. If you ask Spark to count the number of elements in the RDD, it will tell you how many lines are in the file. If an RDD contains only two-element tuples, the RDD is known as a “pair RDD” and offers some additional functionality. The first element of each tuple is treated as a key, and the second element as a value. Note that all RDDs are immutable, and any operations that would mutate an RDD will instead create a new RDD.
 
