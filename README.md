@@ -1,16 +1,18 @@
-# VM Setup 
+# Page Rank in Spark
 
-You can follow the same instructions as in programming assignment 3's VM setup (https://github.com/stanford-cs149/asst3/blob/master/cloud_readme.md) to create another instance with the same configuration (or continue using the one you already created). 
+## First things first: VM Setup
 
-You will need to install Python and Java before installing Spark. Here are the commands for doing so: 
+You can follow the same instructions as in programming assignment 3's VM setup (https://github.com/stanford-cs149/asst3/blob/master/cloud_readme.md) to create another instance with the same configuration (or continue using the one you already created).
+
+You will need to install Python and Java before installing Spark. Here are the commands for doing so:
 
 ```
-sudo apt-get install python 
+sudo apt-get install python
 sudo apt-get install python-pip && sudo pip install numpy
-sudo apt install openjdk-8-jre-headless 
+sudo apt install openjdk-8-jre-headless
 ```
 
-# Spark Tutorial
+## Before starting the page rank assignment: Spark Tutorial
 Here you will learn how to write, compile, debug and execute a simple Spark program. First part of the assignment serves as a tutorial and the second part asks you to write your own Spark program. We have included a tutorial for using Python.
 
 Section 1 explains how to download and install a stand-alone Spark instance. All operations done in this Spark instance will be performed against the files in your local file system.
@@ -21,9 +23,7 @@ Section 3 explains how to use Spark to launch Spark applications written in an I
 
 Section 4 gives an example of writing a simple word count application for Spark.
 
-The last section is the actual assignment you will be graded on (Page Rank in Spark)
-
-## 1) Setting up a stand-alone Spark Instance
+### 1) Setting up a stand-alone Spark Instance
 Download and install Spark 2.2.1 on your machine (you can use wget): https://www.apache.org/dyn/closer.lua/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz
 
 Unpack the compressed TAR ball.
@@ -34,10 +34,9 @@ SPARK_HOME="$HOME/spark-2.2.1-bin-hadoop2.7"\
 SPARK_LOCAL_IP="127.0.0.1"\
 PATH="$HOME/bin:$HOME/.local/bin:$SPARK_HOME/bin:$PATH"
 
-## 2) Running the Spark shell
+### 2) Running the Spark shell
 The easiest way to run your Spark applications is using the Spark shell, a REPL that let's you interactively compose your application. To start the Spark shell, do the following:
 
-### Python
 For Python:
 1. Change into the directory where you unpacked the Spark binary
 2. For Python use: bin/pyspark
@@ -51,10 +50,9 @@ Hello!
 
 To learn about writing Spark applications, please read through the Spark programming guide: https://spark.apache.org/docs/2.2.0/rdd-programming-guide.html
 
-## 3) Launching Spark Applications
+### 3) Launching Spark Applications
 The Spark shell is great for exploring a data set or experimenting with the API, but it's often best to write your Spark applications outside of the Spark interpreter using an IDE or other smart editor. Spark accepts applications written in four languages: Scala, Java, python, and R. We highly recommend python as both the language itself and the python Spark API are straightforward.
 
-### Python
 For Python, assume you have the following program in a text file called myapp.py:
 
 ```
@@ -83,15 +81,14 @@ You can replace the “4” with any number. To use as many threads as are avail
 bin/spark-submit --master ’local[*]’ path/to/myapp.py path/to/file
 ```
 
-## 4) WordCount in Spark
+### 4) WordCount in Spark
 
-The typical “Hello, world!” type of app for Spark applications is word count. The map/reduce model is particularly well suited to applications like counting words in a document. In this section, you will see how to develop a word count application using Spark in Python, and Scala. Prior to reading this section, you should read through the Spark programming guide if you haven’t already.
+The typical “Hello, world!” type of app for Spark applications is word count. The map/reduce model is particularly well suited to applications like counting words in a document. In this section, you will see how to develop a word count application using Spark in Python. Prior to reading this section, you should read through the Spark programming guide if you haven’t already.
 
 All operations in Spark operate on data structures called RDDs, Resilient Distributed Datasets. An RDD is nothing more than a collection of objects. If you read a file into an RDD, each line will become an object (a string, actually) in the collection that is the RDD. If you ask Spark to count the number of elements in the RDD, it will tell you how many lines are in the file. If an RDD contains only two-element tuples, the RDD is known as a “pair RDD” and offers some additional functionality. The first element of each tuple is treated as a key, and the second element as a value. Note that all RDDs are immutable, and any operations that would mutate an RDD will instead create a new RDD.
 
 For the example you can use the pg100.txt file to perform word count. It can be found the handout repo.
 
-### Python
 For this example, you will create your application in an editor instead of using the Spark shell. The first step of every such Spark application is to create a Spark context:
 
 ```
@@ -145,8 +142,10 @@ counts.saveAsTextFile(sys.argv[2])
 sc.stop()
 ```
 
-# Page Rank in Spark (100 Points)
-In this problem, you will learn how to implement the PageRank algorithm in Spark. You will be experimenting with a small randomly generated graph (assume graph has no dead-ends) provided at graph-full.txt. You can use graph-small.txt as a sanity check that your code is working, and for debugging. There are 100 nodes (n = 100) in the small graph and 1000 nodes (n = 1000) in the full graph, and m = 8192 edges, 1000 of which form a directed cycle (through all the nodes) which ensures that the graph is connected. It is easy to see that the existence of such a cycle ensures that there are no dead ends in the graph. There may be multiple directed edges between a pair of nodes, and your solution should treat them as the same edge. The first column in graph-full.txt refers to the source node, and the second column refers to the destination node.
+## Assignment: Page Rank in Spark (100 Points) due on 03/14
+You have already implemented the Page Rank algorithm in openMP. Now you will implement a similar version of the algorithm using Spark!
+
+In this problem, you will be experimenting with a small randomly generated graph (assume graph has no dead-ends) provided at graph-full.txt. You can use graph-small.txt as a sanity check that your code is working, and for debugging. There are 100 nodes (n = 100) in the small graph and 1000 nodes (n = 1000) in the full graph, and m = 8192 edges, 1000 of which form a directed cycle (through all the nodes) which ensures that the graph is connected. It is easy to see that the existence of such a cycle ensures that there are no dead ends in the graph. There may be multiple directed edges between a pair of nodes, and your solution should treat them as the same edge. The first column in graph-full.txt refers to the source node, and the second column refers to the destination node.
 
 Implementation hint: You may choose to store the PageRank vector r either in memory or as an RDD. Only the matrix of links is too large to store in memory.
 
