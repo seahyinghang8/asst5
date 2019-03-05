@@ -178,7 +178,7 @@ Based on this equation, the iterative procedure to compute PageRank works as fol
 2. For i from 1 to k, iterate: r = 1[(1 - β)/n] + β*M*r
 ```
 
-You will need to figure out the best way to store the matrix M as an RDD (to simplify the matrix-vector multiplication in each iteration). You CAN NOT and SHOULD NOT store the matrix M in memory (keep it in RDD form in Spark). It will not fit in memory on the larger graphs. You must perform the matrix-vector multiplication above using Spark functions.
+You will need to figure out the best way to store the matrix M as an RDD (to simplify the matrix-vector multiplication in each iteration). You CAN NOT and SHOULD NOT store the matrix M in memory (keep it in RDD form in Spark). It will not fit in memory on the larger graphs. You must perform the matrix-vector multiplication above using Spark functions. You will also be tested on performance through timing we have added into the starter code. We provide reference times for your benefit. Write your code in between where the STUDENT CODE comments indicate in order to properly time your solution, otherwise you will not receive credit for the performance portion.
 
 We recommend that you use numpy in other parts of your code to perform vector additions, dot products, etc... Here is a few numpy functions you may find useful:
 1. https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html

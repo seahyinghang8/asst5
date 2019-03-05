@@ -9,12 +9,13 @@ sc = SparkContext(conf=conf)
 
 # This loads the input file as an RDD, with each element being a string
 # of the form "source destination" where source and destination
-# are integer node id's representing the directed edge from node source
-# to node destination.
+# are node id's representing the directed edge from node source
+# to node destination. Note that the elements of this RDD are string
+# types, hence you will need to map them to integers later.
 lines = sc.textFile(sys.argv[1])
 
-### STUDENT PAGE RANK CODE ###
 first = time.time()
+### STUDENT PAGE RANK CODE START ###
 
 
 
@@ -25,7 +26,7 @@ first = time.time()
 
 
 
-
+### STUDENT PAGE RANK CODE END   ###
 last = time.time()
 print("Total Program Time: " + str(last - first))
 
