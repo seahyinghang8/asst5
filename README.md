@@ -158,7 +158,7 @@ You have already implemented the Page Rank algorithm in openMP. Now you will imp
 
 In this problem, you will be experimenting with a small randomly generated graph (assume graph has no dead-ends) provided at graph-full.txt. You can use graph-small.txt as a sanity check that your code is working, and for debugging. These graphs have directed edges, and the files you will be parsing consist of lines, where each line represents an edge by two nodes seperated by a space. The first node is the source node, and the second is the destination node for the edge. For example here is what a line may look like: "0 1".
 
-There are 100 nodes (n = 100) in the small graph and 1000 nodes (n = 1000) in the full graph. You can use the graph-small.txt file for debugging and sanity check, and the graph-full.txt to get a sense of your performance. We will be additionally testing you on much larger graphs that we will release in a day or two. You may choose to store the PageRank vector r either in memory or as an RDD, however you will not be able to store the matrix of links (M below) in memory, especially on the larger graphs we will be testing you on (that will have around 500 million nodes). Due to this the main challenge will be figuring out how to store the Matrix of links M as an RDD, and perform the matrix-vector multiply using Spark primitives.
+There are 100 nodes (n = 100) in the small graph and 1000 nodes (n = 1000) in the full graph. You can use the graph-small.txt file for debugging and sanity check, and the graph-full.txt to get a sense of your performance. We will be additionally testing you on much larger graphs that we will release in a day or two. You may choose to store the PageRank vector r either in memory or as an RDD, however you will not be able to store the matrix of links (M below) in memory, especially on the larger graphs we will be testing you on (that will have around 500 million nodes). Due to this, the main challenge will be figuring out how to store the Matrix of links M as an RDD, and perform the matrix-vector multiply using Spark primitives.
 
 ### Algorithm
 Now let us setup the algorithm you will be implementing. Let the matrix M be an (n x n) matrix such that for any i and j between [1, n], M_{ji} = 1/deg(i) if there exists a directed edge from i to j, and 0 otherwise (Here M_{ji} is the j'th row and i'th column entry of M). Here, deg(i) is the number of outgoing edges from node i in the graph. If there are multiple edges in the same direction between two nodes, treat them as a single edge.
@@ -176,7 +176,7 @@ Based on this equation, the iterative procedure to compute PageRank works as fol
 2. For i from 1 to k, iterate: r = 1[(1 - β)/n] + β*M*r
 ```
 
-You will need to figure out the best way to store the matrix M as an RDD (to simplify the matrix-vector multiplication in each iteration).
+You will need to figure out the best way to store the matrix M as an RDD (to simplify the matrix-vector multiplication in each iteration). You CAN NOT and SHOULD NOT store the matrix M in memory (keep it in RDD form in Spark). It will not fit in memory on the larger graphs. You must perform the matrix-vector multiplication above using Spark functions.
 
 We recommend that you use numpy in other parts of your code to perform vector additions, dot products, etc... Here is a few numpy functions you may find useful:
 1. https://docs.scipy.org/doc/numpy/reference/generated/numpy.dot.html
