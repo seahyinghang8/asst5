@@ -162,6 +162,8 @@ There are 100 nodes (n = 100) in the small graph and 1000 nodes (n = 1000) in th
 
 You may choose to store the PageRank vector r either in memory or as an RDD, however you will not be able to store the matrix of links (M below) in memory, especially on the larger graphs we will be testing you on (that will have around 500 million nodes). Due to this, the main challenge will be figuring out how to store the Matrix of links M as an RDD, and perform the matrix-vector multiply using Spark primitives.
 
+Note that the graph files may have duplicate edges, so you will need to take care of this case. Treat all duplicate edges as one edge (you can use Spark's .distinct() function to do this).
+
 ### Algorithm
 Now let us setup the algorithm you will be implementing. Let the matrix M be an (n x n) matrix such that for any i and j between [1, n], M_{ji} = 1/deg(i) if there exists a directed edge from i to j, and 0 otherwise (Here M_{ji} is the j'th row and i'th column entry of M). Here, deg(i) is the number of outgoing edges from node i in the graph. If there are multiple edges in the same direction between two nodes, treat them as a single edge.
 
