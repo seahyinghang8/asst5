@@ -197,14 +197,14 @@ Run the aforementioned iterative process in Spark for 100 iterations (assuming Î
 1. List the top 5 node ids with the highest PageRank scores.
 2. List the bottom 5 node ids with the lowest PageRank scores.
 
-For a sanity check, we have provided a smaller dataset (graph-small.txt). In that dataset, the top node has id 53 with value 0.036 after 40 iterations (you can use this value to help debug). We will be grading you on your results for graph-full.txt and larger graphs that we will be releasing. We give you a file pageRank.py to write your code in, with basic starter code that starts your Spark context and reads in the input text file as an RDD. You will also be reporting the total time it took your program to run. The starter code already wraps the code you will write in timing that is printed out at the very end (report this number in seconds). Our reference solution takes less than ~12-13 seconds for 100 iterations on graph-full.txt (on 32 vCPUs).
+For a sanity check, we have provided a smaller dataset (graph-small.txt). In that dataset, the top node has id 53 with value 0.036 after 40 iterations (you can use this value to help debug). We will be grading you on your results for graph-full.txt and graph-large.txt. We give you a file pageRank.py to write your code in, with basic starter code that starts your Spark context and reads in the input text file as an RDD. You will also be reporting the total time it took your program to run. The starter code already wraps the code you will write in timing that is printed out at the very end (report this number in seconds). Our reference solution takes less than ~12-13 seconds for 100 iterations on graph-full.txt (on 32 vCPUs) and less than 340 seconds on graph-large.txt..
 
 We expect you to use Spark for all operations on the data (including performing the matrix-vector multiply). You can use numpy or regular python for computing dot products and other arithmetic, but any other data computation should leverage Spark.
 
 What you need to turn in (in a zipped file to Canvas):
 1. Turn in your code in pageRank.py
-2. Turn in a .txt file with the top 5 node ids and their PageRank scores, and the bottom 5 node ids and their PageRank scores for graph-full.txt after 100 iterations. This is worth 70 points for correctness.
-3. In the same text file, include the total time it took your code to run. This is worth 30 points for performance.
+2. Turn in a .txt file with the top 5 node ids and their PageRank scores, and the bottom 5 node ids and their PageRank scores for graph-full.txt and graph-large.txt after 100 iterations. This is worth 70 points for correctness.
+3. In the same text file, include the total time it took your code to run on graph-full.txt and graph-large.txt. This is worth 30 points for performance.
 
 
 
