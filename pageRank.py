@@ -2,16 +2,12 @@ import sys
 from pyspark import SparkConf, SparkContext
 import numpy as np
 import time
-
-
-### NOTE: DEBUG TOOL ###
-def print_rdd(rdd):
-	print("\n\nPrinting 1 RDD:{0} \n".format(rdd.take(1)[0]))
-
+import re
 
 # Create spark context
 conf = SparkConf()
 sc = SparkContext(conf=conf)
+sc.setLogLevel("ERROR")
 
 # This loads the input file as an RDD, with each element being a string
 # of the form "source destination" where source and destination
@@ -23,9 +19,13 @@ lines = sc.textFile(sys.argv[1])
 first = time.time()
 ### STUDENT PAGE RANK CODE START ###
 
+# Setup program constants
+num_steps = 40 #100
+beta = 0.8
+
 # Create matrix M - broken into rows
 # Convert lines to pairs
-pairs = lines.map(lambda l: tuple([int(num) for num in l.split('\t')])).distinct()
+pairs = lines.map(lambda l: tuple([int(num) for num in re.split('[ |\t]', l)])).distinct()
 reverse_pairs = pairs.map(lambda p: tuple(reversed(p)))
 # Count the number of elements in the graph
 num_elem = pairs.flatMap(lambda p: p).distinct().count()
@@ -42,8 +42,38 @@ def nodesToVec(nodes, deg, n):
 
 M = reverse_pairs.groupByKey().map(lambda (k, v): (k, nodesToVec(v, outgoing_count_dict, num_elem)))
 
-#print_rdd(M)
+# Initialize pageRank vector r
+r = np.ones((num_elem, 1)) / num_elem
+r_prev = r.copy()
 
+# Calculate teleport probability
+tele_prob = (1. - beta) / num_elem
+
+# Iterate through the number of steps
+for _ in range(num_steps):
+ 	rdd_r = M.map(lambda (k, v): (k, (v.dot(r_prev) * beta)[0][0]))
+	r[:] = tele_prob
+
+	for (node, val) in rdd_r.collect():
+		r[node - 1][0] += val
+
+	# Swap the assignments
+	temp = r_prev
+	r_prev = r
+	r = temp
+
+# # For small-graph sanity check
+# print("\n\nThe maximum node is {} with the value {}.\n\n".format(r.argmax() + 1, r[r.argmax()]))
+
+# # Print out for large graphs
+# sorted_indices = np.argsort(r.squeeze(), axis=0)
+# print("The top 5 nodes are...")
+# for i in range(5):
+# 	print("Node {}\t Val {}".format(sorted_indices[num_elem - 1 - i] + 1, r[sorted_indices[num_elem - 1 - i]]))
+
+# print("The bottom 5 nodes are...")
+# for i in range(5):
+# 	print("Node {}\t Val {}".format(sorted_indices[i] + 1, r[sorted_indices[i]]))
 
 ### STUDENT PAGE RANK CODE END   ###
 last = time.time()
