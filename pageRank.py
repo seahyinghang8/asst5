@@ -20,7 +20,7 @@ first = time.time()
 ### STUDENT PAGE RANK CODE START ###
 
 # Setup program constants
-num_steps = 40 #100
+num_steps = 100
 beta = 0.8
 
 # Create matrix M - broken into rows
@@ -68,12 +68,12 @@ for _ in range(num_steps):
 # # Print out for large graphs
 # sorted_indices = np.argsort(r.squeeze(), axis=0)
 # print("The top 5 nodes are...")
-# for i in range(5):
-# 	print("Node {}\t Val {}".format(sorted_indices[num_elem - 1 - i] + 1, r[sorted_indices[num_elem - 1 - i]]))
-
+# for i in range(1, 6):
+#     print("Node {}\t Val {}".format(sorted_indices[-i] + 1, r[sorted_indices[-i]]))
+# 
 # print("The bottom 5 nodes are...")
 # for i in range(5):
-# 	print("Node {}\t Val {}".format(sorted_indices[i] + 1, r[sorted_indices[i]]))
+#     print("Node {}\t Val {}".format(sorted_indices[i] + 1, r[sorted_indices[i]]))
 
 ### STUDENT PAGE RANK CODE END   ###
 last = time.time()
